@@ -67,7 +67,7 @@
     
 
     //Get character count and playerID
-    $result = mysql_query("SELECT COUNT(CharacterIndex) as count from characters WHERE PlayerID = '" . $id . "'");
+    $result = mysql_query("SELECT COUNT(CharacterIndex) as count from characters WHERE PlayerID = '" . $id . "' and deleted = 0");
     $row = mysql_fetch_assoc($result);
     echo encrypt($row["count"] . "|" . $id);
     
