@@ -1,8 +1,8 @@
 <?php
 	DEFINE('DBHOST', 'localhost');
     DEFINE('DBUSER', 'root');
-    DEFINE('DBPASSWORD', 'Cyb668622');
-    DEFINE('DBNAME', 'alienwarfare');
+    DEFINE('DBPASSWORD', 'Gumpy');
+    DEFINE('DBNAME', 'alien warfare');
 
 
     DEFINE('KEY', base64_decode("mviGtw1/fLj6eEc3mIo1w2NRCrDVZsMS4VGSMFTmMdc="));
@@ -12,9 +12,9 @@
     
 
 
-    if($dbc = mysql_pconnect(DBHOST, DBUSER, DBPASSWORD))
+    if($dbc = mysqli_connect(DBHOST, DBUSER, DBPASSWORD))
     {
-        if(!mysql_select_db(DBNAME))
+        if(!mysqli_select_db($dbc, DBNAME))
         {
             trigger_error("Could not select DB!");
             exit();
