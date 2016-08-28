@@ -16,7 +16,7 @@
     $email = trim($accountname);
     if(preg_match('~^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$~', $email))
     {
-        $email = mysql_real_escape_string($email, $dbc);
+        $email = mysqli_real_escape_string($dbc, $email);
     }
     else
     {
@@ -27,13 +27,13 @@
 
 
     //Get the salt
-    $result = mysql_query("SELECT Salt from accounts WHERE Email = '" . $email . "'");
-    if (mysql_num_rows($result) == 0)
+    $result = mysqli_query($dbc, "SELECT Salt from accounts WHERE Email = '" . $email . "'");
+    if (mysqli_num_rows($result) == 0)
     {
         echo encrypt(uniqid());
         exit();
     }
-    $row = mysql_fetch_array($result);
+    $row = mysqli_fetch_array($result);
     $salt = $row[0];
 
 
@@ -42,7 +42,7 @@
     $pw = trim($password);
     if(preg_match('~^(?=[-_a-zA-Z0-9]*?[A-Z])(?=[-_a-zA-Z0-9]*?[a-z])(?=[-_a-zA-Z0-9]*?[0-9])\S{8,16}$~', $pw))
     {
-        $pw = mysql_real_escape_string($pw, $dbc);
+        $pw = mysqli_real_escape_string($dbc, $pw);
         $pw = hash_pbkdf2("sha256", $pw, $salt, 1000, 24, false);
     }
     else
@@ -53,8 +53,8 @@
 
 
     //See if the password is in the database
-    $result = mysql_query("SELECT ID from accounts WHERE Password = '" . $pw . "'");
-    if (mysql_num_rows($result) == 0)
+    $result = mysqli_query($dbc, "SELECT ID from accounts WHERE Password = '" . $pw . "'");
+    if (mysqli_num_rows($result) == 0)
     {
         echo encrypt(uniqid());
         exit();
@@ -62,13 +62,13 @@
 
     
     //Player ID
-    $row = mysql_fetch_array($result);
+    $row = mysqli_fetch_array($result);
     $id = $row[0];
     
 
     //Get character count and playerID
-    $result = mysql_query("SELECT COUNT(CharacterIndex) as count from characters WHERE PlayerID = '" . $id . "' and deleted = 0");
-    $row = mysql_fetch_assoc($result);
+    $result = mysqli_query($dbc, "SELECT COUNT(CharacterIndex) as count from characters WHERE PlayerID = '" . $id . "' and deleted = 0");
+    $row = mysqli_fetch_assoc($result);
     echo encrypt($row["count"] . "|" . $id);
     
     
